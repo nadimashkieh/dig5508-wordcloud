@@ -9,7 +9,7 @@ from pprint import pprint
 import matplotlib.pyplot as plt 
 from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
 
-
+# create a book object
 class book:
     def __init__(self, index, author, title, subject ):
         self.index = index
@@ -29,7 +29,7 @@ class book:
     def get_book_subject(self):
         return self.subject
 
-
+# create a catalog object
 class book_catalog:
     def __init__( self ):
         self.books = []
@@ -67,7 +67,7 @@ class book_catalog:
         for book in self.books:
             if book.subject not in subjects:
                 subjects.append( book.subject )
-        return subjects
+        return subjects.sort()
 
     def display_titles_by_author( self ):
         authors = {}
@@ -77,9 +77,8 @@ class book_catalog:
         for author in authors:
             print( f"{'[ ' + author + ' ]':>50}" + ' ==> ' + authors[ author ] )
         return
-##
-##
-##
+
+# Get books from the metadata
 def get_all_titles():
     my_catalog = book_catalog()
 
@@ -99,7 +98,7 @@ def get_all_titles():
                 my_catalog.add_book( my_book )
     return( my_catalog )
 
-
+# wordcloud
 def display_word_cloud( text ):
 
     comment_words = '' 
@@ -107,16 +106,13 @@ def display_word_cloud( text ):
     
     tokens = text.split() 
 
-   # my_word_frequency = {}
-
     # Converts each token into lowercase 
     for i in range(len(tokens)): 
         tokens[i] = tokens[i].lower() 
        # my_word_frequency[ tokens[i] ] += 1
 
     comment_words += " ".join(tokens)+" "
-    #pprint( my_word_frequency)
-
+   
     wordcloud = WordCloud(width = 800, height = 800, 
                     background_color ='white', 
                     stopwords = stopwords, 
@@ -130,7 +126,7 @@ def display_word_cloud( text ):
     
     plt.show()
 
-
+# Search options for user
 def search_display_options( my_catalog ):
     search_result_catalog = book_catalog()
 
@@ -162,19 +158,16 @@ def search_display_options( my_catalog ):
             search_result_catalog.add_book( my_book )
             match = True
 
-    # for my_book in search_result_catalog.get_books():
-    #     print( str( my_book.get_book_index() ) + ') ' + '[ Author: ' + my_book.get_book_author() + '] [Title: ' + my_book.get_book_title() + ']')
-
+    
     search_result_catalog.display_titles_by_author()
-    search_result_catalog.get_authors()
-
+    
     if match:
         title_num = input( 'Please type a title number from the above list: ')
    
         print( 'Displaying Word Cloud in [Subject: ' + my_book.get_book_subject() + '] for [Title: ' + my_book.get_book_title() + '] by [Author:' + my_book.get_book_author() + ']'  )
         try:
             my_book = search_result_catalog.get_book( title_num )
-            return( strip_headers( load_etext( int( title_num ) ) ).strip() )
+            return( strip_headers( load_etext( int( title_num ) ) ).strip() )  # call that gets bok text from gutenberg
         except:
             print ('Failed to find a textual download candidate for ' + my_book.get_book_title() )
             return(None)
@@ -182,8 +175,6 @@ def search_display_options( my_catalog ):
         print('No matches found for [' + search_term + ']...')
         return(None)
     
-    #display(json.dumps( { "title": title_text, "author": catalog[ title_text ][ 0 ], "number": catalog[ title_text ][ 1 ], "text": text } ))
-    #display( json.dumps( [ title_text, catalog[ title_text ][ 0 ], catalog[ title_text ][ 1 ], text ] ) )
 
 
 ##

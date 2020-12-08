@@ -1,0 +1,123 @@
+      
+Main Program
+The following four lines of code were provided by Project Gutenberg ? they facilitate creating a local database of all the project Gutenberg titles.
+
+Cache = get_meta_data_cache() 
+Cache.open
+Cache.populate
+graph = cache.graph 
+
+
+Define an object of class ?catalog? named my_catalog 
+my_catalog = Invoke a function (get_all_titles) - the function retrieves from project Gutenberg website all book titles
+      
+Set a flag to check if user would like to search again
+more_titles = ?y?
+
+If more_titles is true, 
+      Define a variable book_text.  
+      Book_text = Invoke a function search_display_options (send all available titles in variable my_catalog as a parameter)
+	If book_text is found, 
+      Invoke a function display_word_cloud(send in book_text as a parameter)
+	Else, ask the user if would like to search again.
+
+Classes and functions 
+
+Class: book
+	Defines a class (book) with attributes: index, author, title, subject.
+Methods:
+	get_book_author
+	get_book_title
+	get_book_index
+	get_book_subject
+
+Class: book_catalog
+	 (book catalog) and create a list of books.
+Methods:
+1- get_books
+returns a list of books stored in this catalog 
+
+2- add_book
+add to my_catalog a title passed in my_book variable, 
+#populate search_result_catalog by author, title, or subject.
+
+3- get_book
+return a book by index using my_book variable
+#check for errors using try except blocks.
+
+4- get_authors
+return a sorted list of authors 
+
+5- get_titles
+returns a sorted list of titles
+
+6- get_subjects
+returns a sorted list of subjects
+
+7- display_titles_by_authors
+populate a dictionary with authors as key. And index and title as values
+print author name, index and title values.
+
+8- get_all_titles
+get titles from Gutenberg library metadata by retrieving all titles
+if title language is English, 
+then get book index, 
+   book author, 
+   book title, 
+   and book subject, get rid of the new line and carriage return.
+   Add my_book to my_catalog
+   Return all titles in a new catalog.
+
+
+9- display_wordcloud
+create a variable comment_words
+create tokens, convert into lowercase,
+add the tokens to comment_words
+use the Wordcloud class with parameters for the canvas size, 
+background color, stopwords omission, min font size, 
+generate wordcloud from the comment_words 
+plot image
+
+10- search_display_options
+set variable search_result_catalog to get value from the book_catalog class
+get input about search_type either by author, title, or subject.
+If invalid input tell the user.
+
+Match the search with books through iteration.
+Set match variable to false.
+For my_book in my_catalog, 
+if the search is by author and the search term is in author?s name, search_result_catalog gets the book, match becomes true.
+If the search is by title, and the search term is in the title, 
+       search_result_catalog gets the book, match becomes true.
+      If the search is by subject, and the search term is in the subject, 
+search_result_catalog gets the book, match becomes true.
+
+      If match is true, then ask the user to enter title number.
+      Print displaying wordcloud.
+      If match is false, tell the user no matches found.
+
+
+Challenges
+
+After several runs, the Gutenberg API got corrupt and I had to populate the cache again by uncommenting and calling cache.populate() function. I also had to delete the local cahce database on the local filesystem (Gutenberg_data subdirectory.)
+
+Project Gutenberg does not provide a REST API. I was not able to exchange data using python JSON documents.
+
+Was not able to download all titles as it took too long.  Had to stop the program ? comment cache.populate and only run on a small sample.  Otherwise the program would take too long to run.
+
+The wordcloud code I copied from https://www.datacamp.com/community/tutorials/wordcloud-python 
+had several lines that were not needed, including some libraries like pandas, numpy, and pillow that turned out to be extra and not needed.
+
+Instructions for users
+
+1- ?Please select a search type: Author, Subject, Title [Aa/Ss/Tt]:? is displayed 
+2- The user enters input (for ex: ?a?)
+3- ?Please enter a search term for an Author:? is displayed
+4- The user enters a term
+5- The program displays a list of titles by the selected author/authors/term with their indexes.
+6- ?Please type a title number from the above list:? is displayed
+7- The user copies a book number 
+8- ?Displaying Word Cloud in [Subject:? ? ?subject? ? ?title? ? ?author ? are displayed
+9- The wordcloud is displayed
+10- ?Would you like to search again: [y/n]? is displayed
+11- If user chooses y, the program continues for a new search. If the user chooses no the program stops.
